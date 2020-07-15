@@ -4,16 +4,24 @@ const Schema = mongoose.Schema
 
 /*
 Action Logs information:
-1. Battle ID (auto-generated)
-2. Opponent name
-3. Action type (0=attack, 1=powerattack, 2=heal, 3=surrender)
-4. Value
-5. Timestamp
+1. Battle ID (unique identifier for each battle)
+2. Player Id
+3. Opponent Id
+4. Action origin (0=player, 1=opponent)
+5. Action type (0=weakattack, 1=strongattack, 2=heal, 3=surrender)
+6. Value (damage dealth / restored health)
+7. Timestamp
+
+Constraints:
+1. If action origin = 1, then action type != 2 or 3
 */
 
 const actionLogSchema = new Schema({
-    enemy: { type: String, required: true },
-    actionType: { type: String, required: true },
+    battleId: { type: Number, required: true },
+    playerId: { type: Number, required: true },
+    enemyId: { type: Number, required: true },
+    actionOrigin: { type: Number, required: true},
+    actionType: { type: Number, required: true },
     value: { type: Number, required: true },
 }, {
     timestamps: true,
