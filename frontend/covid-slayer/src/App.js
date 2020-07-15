@@ -1,12 +1,15 @@
 import React from 'react'
 import './App.css'
+import HealthBar from './components/HealthBar'
 
-function App() {
-  return (
-    <div className="App">
-      Hello World!
-    </div>
-  )
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        HELLO WORLD
+      </div>
+    )
+  }
 }
 
 export default App

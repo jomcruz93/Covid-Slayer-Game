@@ -17,14 +17,14 @@ Constraints:
 */
 
 const actionLogSchema = new Schema({
-    battleId: { type: Number, required: true },
-    playerId: { type: Number, required: true },
-    enemyId: { type: Number, required: true },
-    actionOrigin: { type: Number, required: true},
-    actionType: { type: Number, required: true },
-    value: { type: Number, required: true },
+  battleId: { type: Number, required: true },
+  playerId: { type: Number, required: true },
+  enemyId: { type: Number, required: true },
+  actionOrigin: { type: Number, required: true },
+  actionType: { type: Number, required: true },
+  value: { type: Number, required: true },
 }, {
-    timestamps: true,
+  timestamps: true,
 })
 
 const ActionLog = mongoose.model('ActionLog', actionLogSchema)

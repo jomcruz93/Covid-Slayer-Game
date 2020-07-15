@@ -14,15 +14,15 @@ Enemy information:
 */
 
 const enemySchema = new Schema({
-    enemyId: { type: Number, required: true },
-    enemyName: { type: String, required: true },
-    enemyAvatar: { type: Number, required: true },
+  enemyId: { type: Number, required: true },
+  enemyName: { type: String, required: true },
+  enemyAvatar: { type: Number, required: true },
 
-    enemyWeakAtkRate: { type: Number, required: true },
-    enemyStrongAtkRate: { type: Number, required: true },
+  enemyWeakAtkRate: { type: Number, required: true },
+  enemyStrongAtkRate: { type: Number, required: true },
 
-    enemyWeakAtkId: { type: Number, required: false },
-    enemyStrongAtkId: { type: Number, required: false },
+  enemyWeakAtkId: { type: Number, required: false },
+  enemyStrongAtkId: { type: Number, required: false },
 })
 
 const Player = mongoose.model('Player', playerSchema)

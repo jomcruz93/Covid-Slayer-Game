@@ -14,13 +14,13 @@ Player information:
 */
 
 const playerSchema = new Schema({
-    playerId: { type: Number, required: true },
-    fullname: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    playerAvatar: { type: Number, required: true },
-    playerWeakAtkId: { type: Number, required: false },
-    playerStrongAtkId: { type: Number, required: false },
+  playerId: { type: Number, required: true },
+  fullName: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  playerAvatar: { type: Number, required: true },
+  playerWeakAtkId: { type: Number, required: false },
+  playerStrongAtkId: { type: Number, required: false },
 })
 
 const Player = mongoose.model('Player', playerSchema)

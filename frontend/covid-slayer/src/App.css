@@ -1,3 +1,18 @@
 .App {
-  background-color: aquamarine;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(230, 61, 0);
+}
+
+.healthbar {
+  display: flex;
+  background-color: greenyellow;
+  border: 3px solid green;
+  width: 40%;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  font-size: 46px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
 }
