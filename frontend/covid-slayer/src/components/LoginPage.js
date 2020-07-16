@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
@@ -15,7 +16,7 @@ class LoginPage extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    
+
     // axios.post(
     //   'http://localhost:5050/players/add/', 
     // )
@@ -33,9 +34,9 @@ class LoginPage extends React.Component {
     return (
       <div className='login-page'>
         <Form onSubmit={this.handleSubmit}>
-          <h1
-            style={{ textAlign: 'center' }}>COVID SLAYER</h1>
+          <h1 style={{ textAlign: 'center' }}>COVID SLAYER</h1>
           <br />
+          <h3 style={{ textAlign: 'center' }}>Login to play!</h3>
           <br />
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -58,12 +59,15 @@ class LoginPage extends React.Component {
           <Form.Group controlId="formBasicCheckbox">
             <Form.Check type="checkbox" label="Sign-In automatically" />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button
+            variant="primary"
+            type="submit"
+            style={{ width: '100%' }}
+          >
             Login
           </Button>
-          <Button variant="primary">
-            Sign Up
-          </Button>
+          <div style={{ height: '15px' }} />
+          <p>Don't have an account? <Link to='/signup'>Sign up here.</Link></p>
         </Form>
       </div>
     )

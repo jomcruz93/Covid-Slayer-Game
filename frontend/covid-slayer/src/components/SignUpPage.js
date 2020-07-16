@@ -2,6 +2,7 @@ import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 class SignUpPage extends React.Component {
   constructor(props) {
@@ -10,7 +11,15 @@ class SignUpPage extends React.Component {
     this.state = {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      avatar: 0,
+      redirect: false
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.redirect && !prevState.redirect) {
+      this.setState({ redirect: false })
     }
   }
 
@@ -19,7 +28,9 @@ class SignUpPage extends React.Component {
 
     axios.post('http://localhost:5050/players/add/', this.state)
       .then(res => {
-
+        alert('You have successfully created an account.')
+        // redirect to login page.
+        this.setState({ redirect: true })
       })
       .catch(err => {
         alert(err)
@@ -38,7 +49,15 @@ class SignUpPage extends React.Component {
     this.setState({ password: e.target.value })
   }
 
+  handleAvatarChange = (e) => {
+    this.setState({ avatar: Number(e.target.value) })
+  }
+
   render() {
+    if (this.state.redirect) {
+      return (<Redirect to='/' />)
+    }
+
     return (
       <div className='signup-page'>
         <Form onSubmit={this.handleSubmit}>
@@ -75,8 +94,12 @@ class SignUpPage extends React.Component {
           </Form.Group>
           <Form.Group controlId="formAvatarSelect">
             <Form.Label>Avatar Selection</Form.Label>
-            <Form.Control as="select">
-              <option>Dummy Avatar</option>
+            <Form.Control
+              onChange={this.handleAvatarChange}
+              as="select"
+              defaultValue={this.state.avatar}
+            >
+              <option value={0}>Dummy Avatar</option>
             </Form.Control>
           </Form.Group>
           <Button variant="primary" type="submit" style={{ width: '100%' }}>

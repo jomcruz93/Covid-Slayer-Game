@@ -18,7 +18,6 @@ const playerSchema = new Schema({
   password: { type: String, required: true },
   playerAvatarId: { type: Number, required: true }
 })
-
 */
 
 router.route('/').get((req, res) => {
@@ -28,24 +27,30 @@ router.route('/').get((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err))
 })
 
+// For registration.
 router.route('/add').post((req, res) => {
   // add new player into database
-  const playerId = Number(req.body.playerId)
-  const fullName = req.body.fullName
-  const email = req.body.email
-  const password = req.body.password
-  const playerAvatarId = Number(req.body.playerAvatarId)
+  const newPlayer = new Player()
 
-  const newPlayer = new Player({
-    playerId,
-    fullName,
-    email,
-    password,
-    playerAvatarId
-  })
+  newPlayer.fullName = req.body.name
+  newPlayer.email = req.body.email
+  newPlayer.password = newPlayer.generateHash(req.body.password)
+  newPlayer.playerAvatarId = Number(req.body.avatar)
+
+  // const fullName = req.body.name
+  // const email = req.body.email
+  // const password = req.body.password
+  // const playerAvatarId = Number(req.body.playerAvatarId)
+
+  // const newPlayer = new Player({
+  //   fullName,
+  //   email,
+  //   password,
+  //   playerAvatarId
+  // })
 
   newPlayer.save()
-    .then(() => res.json('New player has been successfully added.'))
+    .then((player) => res.json(player._id))
     .catch(err => res.status(400).json('Error: ' + err))
 })
 
