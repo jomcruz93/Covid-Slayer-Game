@@ -26,7 +26,7 @@ class SignUpPage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    axios.post('http://localhost:5050/players/add/', this.state)
+    axios.post('http://localhost:5050/players/signup/', this.state)
       .then(res => {
         alert('You have successfully created an account.')
         // redirect to login page.

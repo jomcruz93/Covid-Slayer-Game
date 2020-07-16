@@ -17,9 +17,14 @@ class LoginPage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
 
-    // axios.post(
-    //   'http://localhost:5050/players/add/', 
-    // )
+    axios.post('http://localhost:5050/players/login/', this.state)
+    .then(res => {
+      alert('You have logged in.')
+      console.log(res.data)
+    })
+    .catch(err => {
+      alert(err)
+    })
   }
 
   handleEmailChange = (e) => {
@@ -55,9 +60,6 @@ class LoginPage extends React.Component {
               onChange={this.handlePasswordChange}
               value={this.state.password}
             />
-          </Form.Group>
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Sign-In automatically" />
           </Form.Group>
           <Button
             variant="primary"

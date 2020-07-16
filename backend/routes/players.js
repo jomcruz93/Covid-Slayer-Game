@@ -1,5 +1,6 @@
 const router = require('express').Router()
 let Player = require('../models/player.model')
+let PlayerSession = require('../models/playerSession.model')
 
 /*
 Player information:
@@ -23,39 +24,58 @@ const playerSchema = new Schema({
 router.route('/').get((req, res) => {
   // get all players' data
   Player.find({})
-  .then(playerData => res.json(playerData))
-  .catch(err => res.status(400).json('Error: ' + err))
+    .then(playerData => res.json(playerData))
+    .catch(err => res.status(400).json('Error: ' + err))
 })
 
 // For registration.
-router.route('/add').post((req, res) => {
-  // add new player into database
+router.route('/signup').post((req, res) => {
   const newPlayer = new Player()
 
-  newPlayer.fullName = req.body.name
-  newPlayer.email = req.body.email
+  newPlayer.fullName = req.body.name.trim()
+  newPlayer.email = req.body.email.toLowerCase().trim()
   newPlayer.password = newPlayer.generateHash(req.body.password)
   newPlayer.playerAvatarId = Number(req.body.avatar)
 
-  // const fullName = req.body.name
-  // const email = req.body.email
-  // const password = req.body.password
-  // const playerAvatarId = Number(req.body.playerAvatarId)
-
-  // const newPlayer = new Player({
-  //   fullName,
-  //   email,
-  //   password,
-  //   playerAvatarId
-  // })
-
   newPlayer.save()
-    .then((player) => res.json(player._id))
+    .then(player => res.json(player._id))
     .catch(err => res.status(400).json('Error: ' + err))
+})
+
+// For login.
+router.route('/login').post((req, res) => {
+  const email = req.body.email.toLowerCase().trim()
+  const password = req.body.password
+
+  Player.find({ email: email })
+    .then(playerData => {
+      if (playerData.length != 1) {
+        res.status(400).json('Error: Invalid')
+      } else {
+        const player = playerData[0]
+        if (!player.validPassword(password)) {
+          res.status(400).json('Error: Invalid')
+        }
+
+        const playerSession = new PlayerSession()
+        playerSession.playerId = player._id
+        playerSession.save()
+          .then(token => res.json({
+            tokenId: token._id,
+            fullName: player.fullName,
+            avatarId: player.playerAvatarId,
+            playerId: player._id
+          }))
+          .catch(err => res.status(400).json('Error: ' + err))
+      }
+    })
 })
 
 router.route('/update/:id').post((req, res) => {
   // update player info by id
 })
+
+
+
 
 module.exports = router

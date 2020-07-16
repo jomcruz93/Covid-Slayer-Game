@@ -26,8 +26,8 @@ playerSchema.methods.generateHash = function(password) {
 }
 
 playerSchema.methods.validPassword = function(password) {
-  return bcrypt.compareSync(password, this.password);
-};
+  return bcrypt.compareSync(password, this.password)
+}
 
 const Player = mongoose.model('Player', playerSchema)
 
