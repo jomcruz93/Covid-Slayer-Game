@@ -1,13 +1,16 @@
 import React from 'react'
 import './App.css'
-import HealthBar from './components/HealthBar'
+import BattlePage from './components/BattlePage'
+import LoginPage from './components/LoginPage'
+import SignUpPage from './components/SignUpPage'
 
 class App extends React.Component {
+
   render() {
     return (
-      <div>
-        HELLO WORLD
-      </div>
+      <div className='App'>
+        <SignUpPage />
+      </div >
     )
   }
 }

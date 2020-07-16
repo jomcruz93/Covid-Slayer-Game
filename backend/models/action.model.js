@@ -14,13 +14,13 @@ Action information:
 
 const actionSchema = new Schema({
   actionId: { type: Number, required: true },
-  actionName: { type: Number, required: true },
+  actionName: { type: String, required: true },
   actionType: { type: Number, required: true },
   minValue: { type: Number, required: true },
   maxValue: { type: Number, required: true },
   cooldownTime: { type: Number, required: true },
 })
 
-const ActionLog = mongoose.model('Action', actionSchema)
+const Action = mongoose.model('Action', actionSchema)
 
-module.exports = ActionLog
+module.exports = Action

@@ -27,8 +27,10 @@ connection.once('open', () => {
 // Setup routes.
 const playersRouter = require('./routes/players')
 const actionLogsRouter = require('./routes/actionLogs')
+const avatarsRouter = require('./routes/avatars')
 app.use('/players', playersRouter)
 app.use('/actionLogs', actionLogsRouter)
+app.use('/avatars', avatarsRouter)
 
 // Start server.
 app.listen(port, () => {
