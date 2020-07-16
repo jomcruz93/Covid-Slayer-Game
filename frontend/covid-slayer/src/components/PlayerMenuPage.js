@@ -2,7 +2,7 @@ import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { getFromStorage } from '../utils/storage'
 
 class PlayerMenuPage extends React.Component {
@@ -95,19 +95,31 @@ class PlayerMenuPage extends React.Component {
           Welcome <br />{this.state.fullName}
         </h2>
         <br />
-        <Button onClick={this.handleStartBattleBtn} style={btnStyles}>Start Battle</Button>
-        <Button onClick={this.handleLogOutBtn} style={btnStyles}>Log Out</Button>
+        <Link to='battle' style={{
+          height: '100px',
+          width: '50%',
+          marginBottom: '25px'
+        }}>
+          <Button style={btnStyles1}>Start Battle</Button>
+        </Link>
+        <Button onClick={this.handleLogOutBtn} style={btnStyles2}>Log Out</Button>
       </div>
     )
   }
 }
 
-let btnStyles = {
+let btnStyles1 = {
+  height: '100%',
+  width: '100%',
+  fontWeight: 'bold',
+  fontSize: 'calc(20px + 2vw)'
+}
+
+let btnStyles2 = {
   height: '100px',
   width: '50%',
   fontWeight: 'bold',
-  fontSize: 'calc(20px + 2vw)',
-  marginBottom: '50px'
+  fontSize: 'calc(20px + 2vw)'
 }
 
 export default PlayerMenuPage

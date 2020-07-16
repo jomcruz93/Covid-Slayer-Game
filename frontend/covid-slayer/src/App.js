@@ -46,7 +46,7 @@ class App extends React.Component {
               writeToLocalStorage={this.writeToLocalStorage}
             />
           </Route>
-          <Route path='/:id/battle' exact>
+          <Route path='/:id/battle'>
             <BattlePage />
           </Route>
           <Route path='/signup' exact>

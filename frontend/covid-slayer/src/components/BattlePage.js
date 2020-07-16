@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import { getRandomInt } from '../utils/randomNumber'
 
 /*
 <div style={{ width: '100%', display: 'flex' }}>
@@ -20,18 +21,21 @@ class BattlePage extends React.Component {
     super(props)
 
     this.state = {
-      playerHP: null,
-      enemyHP: null,
-      battleTime: 10,
+      playerHP: 100,
+      enemyHP: 100,
+      battleTime: 60,
       battlePaused: true
     }
 
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClick2 = this.handleClick2.bind(this)
-    this.handleClick3 = this.handleClick3.bind(this)
-    this.handleClick4 = this.handleClick4.bind(this)
-    this.handleClick5 = this.handleClick5.bind(this)
+    this.handleAttack = this.handleAttack.bind(this)
+    this.handlePower = this.handlePower.bind(this)
+    this.handleHeal = this.handleHeal.bind(this)
+    this.handleGiveUp = this.handleGiveUp.bind(this)
     this.updateBattleTime = this.updateBattleTime.bind(this)
+  }
+
+  componentDidMount() {
+    // get actions from avatar using avatar id
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -49,52 +53,48 @@ class BattlePage extends React.Component {
     }
   }
 
-  handleClick(e) {
+  handleAttack(e) {
     this.setState(prev => ({
-      playerHP: 100,
-      enemyHP: 100,
-      battlePaused: !prev.battlePaused
+      enemyHP: prev.enemyHP - getRandomInt(1, 11)
     }))
   }
 
-  handleClick2(e) {
+  handlePower(e) {
     this.setState(prev => ({
-      enemyHP: prev.enemyHP - 5
+      enemyHP: prev.enemyHP - getRandomInt(7, 15)
     }))
   }
 
-  handleClick3(e) {
+  handleHeal(e) {
     this.setState(prev => ({
-      enemyHP: prev.enemyHP - 15
+      playerHP: prev.playerHP + getRandomInt(10, 20)
     }))
   }
 
-  handleClick4(e) {
-    this.setState(prev => ({
-      playerHP: prev.playerHP + 5
-    }))
-  }
-
-  handleClick5(e) {
+  handleGiveUp(e) {
     alert('You have surrendered. Returning to start game interface.')
   }
 
   render() {
     return (
-      <div>
+      <div className='battle-page-container'>
         <HealthBar
           playerHealth={this.state.playerHP}
           enemyHealth={this.state.enemyHP}
           battleTime={this.state.battleTime}
           updateBattleTime={this.updateBattleTime}
         />
-        <ActionList
-          handleClick={this.handleClick}
-          handleClick2={this.handleClick2}
-          handleClick3={this.handleClick3}
-          handleClick4={this.handleClick4}
-          handleClick5={this.handleClick5}
-        />
+        <div style={{ flex: 1 }} />
+        <div className='battle-ui-container'>
+          <ActionList
+            handleAttack={this.handleAttack}
+            handlePower={this.handlePower}
+            handleHeal={this.handleHeal}
+            handleGiveUp={this.handleGiveUp}
+          />
+          <div className='battle-log-box' />
+        </div>
+
       </div >
     )
   }

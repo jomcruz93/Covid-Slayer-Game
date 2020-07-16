@@ -13,9 +13,8 @@ Action information:
 */
 
 const actionSchema = new Schema({
-  actionId: { type: Number, required: true },
   actionName: { type: String, required: true },
-  actionType: { type: Number, required: true },
+  actionType: { type: String, required: true },
   minValue: { type: Number, required: true },
   maxValue: { type: Number, required: true },
   cooldownTime: { type: Number, required: true },
