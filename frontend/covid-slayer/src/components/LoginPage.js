@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
+import { getFromStorage } from '../utils/storage'
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -14,16 +15,26 @@ class LoginPage extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // check localstorage for token.
+    const obj = getFromStorage('covid_slayer')
+    if (obj && obj.token) {
+      this.props.updateToken(obj.token)
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
 
     axios.post('http://localhost:5050/players/login/', this.state)
     .then(res => {
-      alert('You have logged in.')
-      console.log(res.data)
+      const token = res.data.tokenId
+      this.props.writeToLocalStorage(token)
+      this.props.updateToken(token)
+      alert('You have successfully logged in.')
     })
     .catch(err => {
-      alert(err)
+      alert('Error: User not found.')
     })
   }
 
@@ -36,6 +47,11 @@ class LoginPage extends React.Component {
   }
 
   render() {
+    if (this.props.token) {
+      return (
+        <Redirect to={'/' + this.props.token + '/home'} />
+      )
+    }
     return (
       <div className='login-page'>
         <Form onSubmit={this.handleSubmit}>

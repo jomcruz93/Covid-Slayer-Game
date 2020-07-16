@@ -21,11 +21,37 @@ const playerSchema = new Schema({
 })
 */
 
-router.route('/').get((req, res) => {
-  // get all players' data
-  Player.find({})
-    .then(playerData => res.json(playerData))
-    .catch(err => res.status(400).json('Error: ' + err))
+// Get the owner of the session's player id and the hasEnded field.
+router.route('/session').get((req, res) => {
+  // get player id data from the token.
+  PlayerSession.find({ _id: req.query.token })
+    .then(sessionData => {
+      if (sessionData.length != 1) {
+        res.status(400).json('Error: Invalid')
+      } else {
+        res.json({
+          playerId: sessionData[0].playerId,
+          hasEnded: sessionData[0].hasEnded
+        })
+      }
+    })
+})
+
+// Query one player from database.
+router.route('/query').get((req, res) => {
+  // get player data by its player id
+  Player.find({ _id: req.query.playerId })
+    .then(playerData => {
+      if (playerData.length != 1) {
+        res.status(400).json('Error: Invalid')
+      } else {
+        res.json({
+          fullName: playerData[0].fullName,
+          email: playerData[0].email,
+          playerAvatarId: playerData[0].playerAvatarId
+        })
+      }
+    })
 })
 
 // For registration.
@@ -62,20 +88,36 @@ router.route('/login').post((req, res) => {
         playerSession.save()
           .then(token => res.json({
             tokenId: token._id,
-            fullName: player.fullName,
-            avatarId: player.playerAvatarId,
-            playerId: player._id
+            fullName: player.fullName
           }))
           .catch(err => res.status(400).json('Error: ' + err))
       }
     })
 })
 
+// For logout
+router.route('/logout').get((req, res) => {
+  // set value of 'hasEnded' attribute to true.
+  PlayerSession.findOneAndUpdate({
+    _id: req.query.token,
+    hasEnded: false
+  }, {
+    $set: {
+      hasEnded: true
+    }
+  }, (err, doc, res2) => {
+    if (err) {
+      res.status(400).json('Error: ' + err)
+    } else {
+      res.json('Session has successfully ended.')
+    }
+  })
+})
+
+// Update one player info. Find by player id.
 router.route('/update/:id').post((req, res) => {
   // update player info by id
 })
-
-
 
 
 module.exports = router
