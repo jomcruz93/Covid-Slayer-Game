@@ -23,3 +23,12 @@ export function setInStorage(key, obj) {
     console.error(err)
   }
 }
+
+export function arrayToTxtDownloadable(arr, fileName) {
+  const blob = new Blob([arr.join('\n')], { type: "text/plain" })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.download = fileName
+  link.href = url
+  link.click()
+}

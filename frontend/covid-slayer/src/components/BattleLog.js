@@ -9,7 +9,7 @@ class BattleLog extends React.Component {
         if (idx === 0) {
           return (
             <p style={{
-              margin: '0px 0px 8px 0px',
+              margin: '0px 0px 15px 0px',
               padding: '0px',
               fontSize: '15px',
               fontWeight: 'bold'

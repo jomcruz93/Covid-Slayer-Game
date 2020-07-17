@@ -3,7 +3,7 @@ import HealthBar from './HealthBar'
 import ActionList from './ActionList'
 import BattleLog from './BattleLog'
 import { getRandomInt } from '../utils/randomNumber'
-
+import { arrayToTxtDownloadable } from '../utils/storage'
 
 class BattlePage extends React.Component {
   constructor(props) {
@@ -112,10 +112,16 @@ class BattlePage extends React.Component {
   }
 
   endBattle() {
-    this.setState({ 
-      battleStart: false })
+    this.setState({
+      battleStart: false
+    })
 
     // save battle logs locally
+    // create the log as downloadable txt file
+    let currDate = new Date().toJSON().slice(0, 10).replace(/-/g, '')
+    let fileName = `${currDate}_logs.txt`
+    let logArr = [...this.state.battleLogs]
+    arrayToTxtDownloadable(logArr, fileName)
 
     // save battle logs to database
   }
@@ -213,7 +219,7 @@ class BattlePage extends React.Component {
           + `Dealt ${value} dmg.`
         let tempArr = [...this.state.battleLogs]
         tempArr.push(actionLog)
-        
+
         this.setState(prev => ({
           playerHP: prev.playerHP - value,
           battleLogs: tempArr
