@@ -17,7 +17,7 @@ const playerSchema = new Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  playerAvatarId: { type: Number, required: true }
+  playerAvatarId: { type: String, required: true }
 })
 */
 
@@ -61,7 +61,7 @@ router.route('/signup').post((req, res) => {
   newPlayer.fullName = req.body.name.trim()
   newPlayer.email = req.body.email.toLowerCase().trim()
   newPlayer.password = newPlayer.generateHash(req.body.password)
-  newPlayer.playerAvatarId = Number(req.body.avatar)
+  newPlayer.playerAvatarId = req.body.avatar
 
   newPlayer.save()
     .then(player => res.json(player._id))
@@ -87,8 +87,7 @@ router.route('/login').post((req, res) => {
         playerSession.playerId = player._id
         playerSession.save()
           .then(token => res.json({
-            tokenId: token._id,
-            fullName: player.fullName
+            tokenId: token._id
           }))
           .catch(err => res.status(400).json('Error: ' + err))
       }

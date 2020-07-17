@@ -18,7 +18,7 @@ const playerSchema = new Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  playerAvatarId: { type: Number, required: true }
+  playerAvatarId: { type: String, required: true }
 })
 
 playerSchema.methods.generateHash = function(password) {
