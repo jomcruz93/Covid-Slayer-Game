@@ -1,9 +1,62 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
+import { Link, Redirect } from 'react-router-dom'
 
 class ActionList extends React.Component {
   render() {
+    console.log(this.props)
+    if (!this.props.battleStart) {
+      return (
+        <div className='action-box'>
+          <Button
+            style={{
+              width: '100%',
+              height: '60%',
+              fontSize: '60px',
+              fontWeight: 'bold',
+              borderBottom: '3px solid rgba(16, 36, 36, 0.2)'
+            }}
+            onClick={this.props.startBattle}
+          >
+            START
+          </Button>
+          <Link
+            to={'/'}
+            style={{
+              width: '50%',
+              height: '40%'
+            }}
+          >
+            <Button
+              style={{
+                width: '100%',
+                height: '100%',
+                fontSize: '30px',
+                fontWeight: 'bold'
+              }}
+            >
+              BACK TO MENU
+            </Button>
+          </Link>
+
+          <Button
+            onClick={this.props.handleSettingsBtn}
+            style={{
+              width: '50%',
+              height: '40%',
+              fontSize: '30px',
+              fontWeight: 'bold',
+              borderLeft: '3px solid rgba(16, 36, 36, 0.2)'
+            }}
+          >
+            BATTLE SETTINGS
+            </Button>
+
+        </div>
+      )
+    }
+
     return (
       <div className='action-box'>
         <Button

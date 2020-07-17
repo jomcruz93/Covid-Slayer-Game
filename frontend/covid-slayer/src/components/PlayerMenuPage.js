@@ -95,7 +95,8 @@ class PlayerMenuPage extends React.Component {
           Welcome <br />{this.state.fullName}
         </h2>
         <br />
-        <Link to='battle' style={{
+        <Link to={{ pathname: 'battle', fullName: this.state.fullName }} 
+          style={{
           height: '100px',
           width: '50%',
           marginBottom: '25px'

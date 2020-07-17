@@ -10,10 +10,15 @@ class BattlePage extends React.Component {
     super(props)
 
     this.state = {
+      // battle info states
+      battleStart: false,
+      battleTimeMax: 60,
+      battleTime: 60,
       playerHP: 100,
       enemyHP: 100,
-      battleTime: 60,
-      battlePaused: true,
+
+      // for logging
+      battleLogs: [],
 
       // attack action states
       attackCD: 3,
@@ -34,13 +39,28 @@ class BattlePage extends React.Component {
       healCurrCD: 10,
       healOnCD: false,
       healMin: 8,
-      healMax: 20
+      healMax: 20,
+
+      // enemy action states
+      enemyActionRate: 0.4,
+      enemyWeakAtkRate: 0.75,
+      enemyStrongAtkRate: 0.35,
+      enemyWeakAtkMin: 1,
+      enemyWeakAtkMax: 10,
+      enemyStrongAtkMin: 10,
+      enemyStrongAtkMax: 20
     }
+
+    this.startBattle = this.startBattle.bind(this)
+    this.endBattle = this.endBattle.bind(this)
+
+    this.handleSettingsBtn = this.handleSettingsBtn.bind(this)
 
     this.handleAttack = this.handleAttack.bind(this)
     this.handlePower = this.handlePower.bind(this)
     this.handleHeal = this.handleHeal.bind(this)
     this.handleGiveUp = this.handleGiveUp.bind(this)
+
     this.updateBattleTime = this.updateBattleTime.bind(this)
   }
 
@@ -51,13 +71,47 @@ class BattlePage extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.battleTime === 0 && prevState.battleTime > 0) {
-      alert('Time\'s up!')
-      this.setState({ battlePaused: true })
+      // check who wins
+      if (this.state.playerHP > this.state.enemyHP) {
+        alert('Time\'s up. You won!')
+      } else if (this.state.enemyHP > this.state.playerHP) {
+        alert('Time\'s up. You lost!')
+      } else {
+        alert('Time\'s up. It\'s a draw!')
+      }
+      
+      this.endBattle()
     }
   }
 
+  startBattle() {
+    this.setState({ 
+      battleStart: true,
+      battleTime: this.state.battleTimeMax,
+      playerHP: 100,
+      enemyHP: 100
+    })
+
+    // start enemy timer
+    this.enemyTimer = setInterval(() => {
+      this.enemyTimerTick()
+    }, 1000)
+  }
+
+  endBattle() {
+    this.setState({ battleStart: false })
+  }
+
+  handleSettingsBtn() {
+    const enteredTimelimit = prompt('Set battle time limit.')
+    this.setState({ 
+      battleTimeMax: enteredTimelimit,
+      battleTime: enteredTimelimit
+     })
+  }
+
   updateBattleTime() {
-    if (this.state.battleTime > 0 && !this.state.battlePaused) {
+    if (this.state.battleTime > 0 && this.state.battleStart) {
       this.setState(prev => ({
         battleTime: prev.battleTime - 1
       }))
@@ -111,6 +165,21 @@ class BattlePage extends React.Component {
 
   enemyTimerTick() {
     // use enemy tendencies to determine action
+    // every second, enemy rolls a chance to attack
+    if (this.state.battleStart && Math.random() <= this.state.enemyActionRate) {
+      if (Math.random() <= this.state.enemyWeakAtkRate) {
+        this.setState(prev => ({
+          playerHP: prev.playerHP
+           - getRandomInt(this.state.enemyWeakAtkMin, this.state.enemyWeakAtkMax + 1)
+        }))
+      } else if (Math.random() <= this.state.enemyStrongAtkRate) {
+        this.setState(prev => ({
+          playerHP: prev.playerHP
+           - getRandomInt(this.state.enemyStrongAtkMin, this.state.enemyStrongAtkMax + 1)
+        }))
+      }
+      // else just idle
+    }
   }
 
 
@@ -156,7 +225,8 @@ class BattlePage extends React.Component {
   }
 
   handleGiveUp(e) {
-    alert('You have surrendered. Returning to start game interface.')
+    alert('You have surrendered.')
+    this.endBattle()
   }
 
   render() {
@@ -177,6 +247,11 @@ class BattlePage extends React.Component {
 
         <div className='battle-ui-container'>
           <ActionList
+            battleStart={this.state.battleStart}
+            startBattle={this.startBattle}
+
+            handleSettingsBtn={this.handleSettingsBtn}
+
             handleAttack={this.handleAttack}
             handlePower={this.handlePower}
             handleHeal={this.handleHeal}

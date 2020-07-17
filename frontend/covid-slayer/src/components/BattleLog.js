@@ -7,6 +7,26 @@ class BattleLog extends React.Component {
       <div className='battle-log-box'>
         <h4 style={{ textAlign: 'center' }}>Battle Log</h4>
         {/*insert logs here followed by a line break.*/}
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
+        test
+        <br />
       </div>
     )
   }
