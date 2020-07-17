@@ -34,14 +34,18 @@
 .healthbar {
   display: flex;
   width: 100%;
+  height: 70px;
+  /* background-color: red; */
+  flex-flow: row wrap;
 }
 
 .healthbar-player {
   display: flex;
-  background-color: greenyellow;
+  background-color: rgb(89, 226, 35);
   border: 3px solid green;
-  width: 40%;
-  height: 50px;
+  flex: 1;
+  /* width: 40%; */
+  height: 100%;
   justify-content: center;
   align-items: center;
   font-size: 46px;
@@ -53,8 +57,9 @@
   display: flex;
   background-color: red;
   border: 3px solid darkred;
-  width: 40%;
-  height: 50px;
+  flex: 1;
+  /* width: 40%; */
+  height: 100%;
   justify-content: center;
   align-items: center;
   font-size: 46px;
@@ -64,12 +69,33 @@
 
 .battle-timer {
   display: flex;
-  flex: 1;
+  width: 120px;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   font-size: 46px;
   font-weight: bold;
   text-shadow: 1px 1px 2px black;
+}
+
+.battle-page-names-container {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  font-size: 30px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.player-name {
+  flex: 1;
+  text-align: left;
+  /* background-color: darkcyan; */
+}
+
+.enemy-name {
+  flex: 1;
+  /* background-color: darkblue; */
+  text-align: right;
 }
 
 .battle-ui-container {

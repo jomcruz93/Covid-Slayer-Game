@@ -46,9 +46,7 @@ class App extends React.Component {
               writeToLocalStorage={this.writeToLocalStorage}
             />
           </Route>
-          <Route path='/:id/battle'>
-            <BattlePage />
-          </Route>
+          <Route path='/:id/battle' component={BattlePage} />
           <Route path='/signup' exact>
             <SignUpPage
               token={this.state.token}

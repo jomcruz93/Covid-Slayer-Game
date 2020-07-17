@@ -42,6 +42,7 @@ class BattlePage extends React.Component {
       healMax: 20,
 
       // enemy action states
+      enemyName: 'Covid Monster',
       enemyActionRate: 0.4,
       enemyWeakAtkRate: 0.75,
       enemyStrongAtkRate: 0.35,
@@ -67,6 +68,8 @@ class BattlePage extends React.Component {
   componentDidMount() {
     // get actions info from avatar using avatar id
     // get enemy actions info from enemy id
+    // const { fullName } = this.props.location.state
+    // console.log(fullName)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,17 +82,27 @@ class BattlePage extends React.Component {
       } else {
         alert('Time\'s up. It\'s a draw!')
       }
-      
+
+      this.endBattle()
+    }
+
+    // check if player health reached zero.
+    if (this.state.playerHP != prevState.playerHP && this.state.playerHP <= 0) {
+      alert('The battle has ended. You lost!')
+      this.endBattle()
+    } else if (this.state.enemyHP != prevState.enemyHP && this.state.enemyHP <= 0) {
+      alert('The battle has ended. You won!')
       this.endBattle()
     }
   }
 
   startBattle() {
-    this.setState({ 
+    this.setState({
       battleStart: true,
       battleTime: this.state.battleTimeMax,
       playerHP: 100,
-      enemyHP: 100
+      enemyHP: 100,
+      battleLogs: []
     })
 
     // start enemy timer
@@ -99,15 +112,20 @@ class BattlePage extends React.Component {
   }
 
   endBattle() {
-    this.setState({ battleStart: false })
+    this.setState({ 
+      battleStart: false })
+
+    // save battle logs locally
+
+    // save battle logs to database
   }
 
   handleSettingsBtn() {
     const enteredTimelimit = prompt('Set battle time limit.')
-    this.setState({ 
+    this.setState({
       battleTimeMax: enteredTimelimit,
       battleTime: enteredTimelimit
-     })
+    })
   }
 
   updateBattleTime() {
@@ -166,16 +184,39 @@ class BattlePage extends React.Component {
   enemyTimerTick() {
     // use enemy tendencies to determine action
     // every second, enemy rolls a chance to attack
+
     if (this.state.battleStart && Math.random() <= this.state.enemyActionRate) {
       if (Math.random() <= this.state.enemyWeakAtkRate) {
+        let value = getRandomInt(this.state.enemyWeakAtkMin, this.state.enemyWeakAtkMax + 1)
+        let d = new Date()
+        let localTime = d.toLocaleTimeString('en-GB')
+        let actionLog =
+          `[${localTime}] `
+          + `${this.state.enemyName} `
+          + `used attack on ${this.props.location.state.fullName}. `
+          + `Dealt ${value} dmg.`
+        let tempArr = [...this.state.battleLogs]
+        tempArr.push(actionLog)
+
         this.setState(prev => ({
-          playerHP: prev.playerHP
-           - getRandomInt(this.state.enemyWeakAtkMin, this.state.enemyWeakAtkMax + 1)
+          playerHP: prev.playerHP - value,
+          battleLogs: tempArr
         }))
       } else if (Math.random() <= this.state.enemyStrongAtkRate) {
+        let value = getRandomInt(this.state.enemyStrongAtkMin, this.state.enemyStrongAtkMax + 1)
+        let d = new Date()
+        let localTime = d.toLocaleTimeString('en-GB')
+        let actionLog =
+          `[${localTime}] `
+          + `${this.state.enemyName} `
+          + `used power attack on ${this.props.location.state.fullName}. `
+          + `Dealt ${value} dmg.`
+        let tempArr = [...this.state.battleLogs]
+        tempArr.push(actionLog)
+        
         this.setState(prev => ({
-          playerHP: prev.playerHP
-           - getRandomInt(this.state.enemyStrongAtkMin, this.state.enemyStrongAtkMax + 1)
+          playerHP: prev.playerHP - value,
+          battleLogs: tempArr
         }))
       }
       // else just idle
@@ -186,11 +227,23 @@ class BattlePage extends React.Component {
   // Functions for handling button clicks.
 
   handleAttack(e) {
+    let value = getRandomInt(this.state.attackMin, this.state.attackMax + 1)
+    let d = new Date()
+    let localTime = d.toLocaleTimeString('en-GB')
+    let actionLog =
+      `[${localTime}] `
+      + `${this.props.location.state.fullName} `
+      + `used attack on ${this.state.enemyName}. `
+      + `Dealt ${value} dmg.`
+
+    let tempArr = [...this.state.battleLogs]
+    tempArr.push(actionLog)
+
     this.setState(prev => ({
-      enemyHP: prev.enemyHP
-        - getRandomInt(this.state.attackMin, this.state.attackMax + 1),
+      enemyHP: prev.enemyHP - value,
       attackOnCD: true,
-      attackCurrCD: this.state.attackCD
+      attackCurrCD: this.state.attackCD,
+      battleLogs: tempArr
     }))
 
     this.attackTimer = setInterval(() => {
@@ -199,11 +252,23 @@ class BattlePage extends React.Component {
   }
 
   handlePower(e) {
+    let value = getRandomInt(this.state.powerMin, this.state.powerMax + 1)
+    let d = new Date()
+    let localTime = d.toLocaleTimeString('en-GB')
+    let actionLog =
+      `[${localTime}] `
+      + `${this.props.location.state.fullName} `
+      + `used power attack on ${this.state.enemyName}. `
+      + `Dealt ${value} dmg.`
+
+    let tempArr = [...this.state.battleLogs]
+    tempArr.push(actionLog)
+
     this.setState(prev => ({
-      enemyHP: prev.enemyHP
-        - getRandomInt(this.state.powerMin, this.state.powerMax + 1),
+      enemyHP: prev.enemyHP - value,
       powerOnCD: true,
-      powerCurrCD: this.state.powerCD
+      powerCurrCD: this.state.powerCD,
+      battleLogs: tempArr
     }))
 
     this.powerTimer = setInterval(() => {
@@ -212,11 +277,23 @@ class BattlePage extends React.Component {
   }
 
   handleHeal(e) {
+    let value = getRandomInt(this.state.healMin, this.state.healMax + 1)
+    let d = new Date()
+    let localTime = d.toLocaleTimeString('en-GB')
+    let actionLog =
+      `[${localTime}] `
+      + `${this.props.location.state.fullName} `
+      + `used heal. `
+      + `Recovered ${value} HP.`
+
+    let tempArr = [...this.state.battleLogs]
+    tempArr.push(actionLog)
+
     this.setState(prev => ({
-      playerHP: prev.playerHP
-        + getRandomInt(this.state.healMin, this.state.healMax + 1),
+      playerHP: prev.playerHP + value,
       healOnCD: true,
-      healCurrCD: this.state.healCD
+      healCurrCD: this.state.healCD,
+      battleLogs: tempArr
     }))
 
     this.healTimer = setInterval(() => {
@@ -238,6 +315,16 @@ class BattlePage extends React.Component {
           battleTime={this.state.battleTime}
           updateBattleTime={this.updateBattleTime}
         />
+
+        <div className='battle-page-names-container'>
+          <div className='player-name'>
+            {this.props.location.state.fullName}
+          </div>
+          <div className='enemy-name'>
+            Covid Monster
+          </div>
+
+        </div>
 
         {(this.state.enemyHP > 0) ?
           <div style={{ flex: 1 }}>image here</div>
@@ -266,7 +353,9 @@ class BattlePage extends React.Component {
             healCurrCD={this.state.healCurrCD}
             healOnCD={this.state.healOnCD}
           />
-          <BattleLog />
+          <BattleLog
+            battleLogs={this.state.battleLogs}
+          />
         </div>
       </div >
     )
